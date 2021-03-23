@@ -12,9 +12,10 @@ function App() {
   const [ölüm, setÖlüm] = useState("");
   const [enfekte, setEnfekte] = useState("");
   const [recovered, Setrecovered] = useState("");
-
-  const [günlükenfekte,setGünlükenfekte]=useState("");
-
+  const [data, setData] = useState("");
+  const [günlükenfekte, setGünlükenfekte] = useState("");
+  const [günlükölü, setGünlükölü] = useState("");
+  const [günlükurtalı, setGünlükurtalı] = useState("");
   useEffect(() => {
     const getData = async () => {
       const url =
@@ -28,6 +29,10 @@ function App() {
           setÖlüm(result);
           setEnfekte(result);
           Setrecovered(result);
+          setGünlükenfekte(result);
+          setGünlükölü(result.data.dailyDeceased);
+          setGünlükurtalı(result.data.dailyRecovered);
+          setData(result.data.lastUpdatedAtSource);
         }
       } catch (error) {
         console.log(error);
@@ -54,6 +59,23 @@ function App() {
         <p>
           Türkiye kurtarılan toplam kişi:
           {recovered ? recovered.data.recovered : <h1>Yükleniyor</h1>}
+        </p>
+        <p>
+          Türkiye günlük enfekte kişi sayısı :
+          {günlükenfekte ? (
+            günlükenfekte.data.dailyInfected
+          ) : (
+            <h1>Yükleniyor</h1>
+          )}
+        </p>
+        <p>
+          Günlük ölü kişi sayısı:
+          {günlükölü ? günlükölü : <h1>Yükleniyor</h1>}
+        </p>
+        <p>
+          {" "}
+          Günlük kurtarılan kişi::
+          {günlükurtalı ? günlükurtalı : <h1>Yükleniyor</h1>}
         </p>
       </div>
     </div>
