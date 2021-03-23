@@ -1,17 +1,21 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow,Tray,nativeImage } = require('electron')
 const path = require('path')
 
 function createWindow () {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
+   
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
   })
 
-  win.loadUrl('http://localhost:3000')
+
+  win.loadURL('http://localhost:3000')
 }
+
+
 
 app.whenReady().then(() => {
   createWindow()
