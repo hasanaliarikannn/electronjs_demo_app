@@ -2,40 +2,31 @@ import React, { useState, useEffect } from "react";
 
 import axios from "axios";
 import moment from "moment";
-
+import { BiLoaderCircle } from "react-icons";
 import "moment/locale/tr";
 
-
-import Doviz from './Doviz'
+import Doviz from "./Doviz";
 
 moment.locale("tr");
 
 function App() {
-  const [bilgi, setBilgi] = useState("");
-  const [ölüm, setÖlüm] = useState("");
-  const [enfekte, setEnfekte] = useState("");
-  const [recovered, Setrecovered] = useState("");
-  const [data, setData] = useState("");
   const [günlükenfekte, setGünlükenfekte] = useState("");
   const [günlükölü, setGünlükölü] = useState("");
   const [günlükurtalı, setGünlükurtalı] = useState("");
+  const [data, setData] = useState("");
   useEffect(() => {
     const getData = async () => {
-      const url =
-        "https://api.apify.com/v2/key-value-stores/28ljlt47S5XEd1qIi/records/LATEST?disableRedirect=true";
+      const url = "https://api.genelpara.com/embed/korona.json";
 
       try {
         const result = await axios.get(url);
 
         if (result.data) {
-          setBilgi(result);
-          setÖlüm(result);
-          setEnfekte(result);
-          Setrecovered(result);
-          setGünlükenfekte(result);
-          setGünlükölü(result.data.dailyDeceased);
-          setGünlükurtalı(result.data.dailyRecovered);
-          setData(result.data.lastUpdatedAtSource);
+          setData(result.data.korona.tarih);
+          setGünlükenfekte(result.data.korona.gunluk_vaka);
+          setGünlükölü(result.data.korona.gunluk_vefat);
+
+          setGünlükurtalı(result.data.korona.gunluk_iyilesen);
         }
       } catch (error) {
         console.log(error);
@@ -46,45 +37,26 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <h2> En son günceleme {moment().format("MMMM Do YYYY, h:mm:ss ")} </h2>
-
-      <div>
-        <p>
-          Türkiye toplam enfekte kişi sayısı :{" "}
-          {enfekte ? enfekte.data.infected : <h1>Yükleniyor</h1>}
-        </p>
-
-        <p>
-          Türikye Toplam Ölü kişi sayısı :{" "}
-          {ölüm ? ölüm.data.deceased : <h1>Yükleniyor</h1>}
-        </p>
-        <p>
-          Türkiye kurtarılan toplam kişi:
-          {recovered ? recovered.data.recovered : <h1>Yükleniyor</h1>}
-        </p>
-        <p>
-          Türkiye günlük enfekte kişi sayısı :
-          {günlükenfekte ? (
-            günlükenfekte.data.dailyInfected
-          ) : (
-            <h1>Yükleniyor</h1>
-          )}
-        </p>
-        <p>
-          Günlük ölü kişi sayısı:
-          {günlükölü ? günlükölü : <h1>Yükleniyor</h1>}
-        </p>
-        <p>
-          {" "}
-          Günlük kurtarılan kişi::
-          {günlükurtalı ? günlükurtalı : <h1>Yükleniyor</h1>}
-        </p>
+    <div className="cards">
+      <div  className="card">
+        <h3 style={{ fontSize: "25px" }}>
+          {günlükenfekte ? günlükenfekte : <i class="fas fa-spinner"></i>}
+        </h3>
+        <p>Günlük Vaka sayısı</p>
       </div>
-
-
-</div>
-
+      <div style={{ backgroundColor: "#e84545" }} className="card">
+        <h3 style={{ fontSize: "25px" }}>
+          {günlükölü ? günlükölü : <i class="fas fa-spinner"></i>}
+        </h3>
+        <p>Günlük Ölüm Sayısı</p>
+      </div>
+      <div style={{ backgroundColor: "#c06014" }} className="card">
+        <h3 style={{ fontSize: "25px" }}>
+          {günlükurtalı ? günlükurtalı : <i class="fas fa-spinner"></i>}
+        </h3>
+        <p>Günlük İyleşen Sayısı</p>
+      </div>
+    </div>
   );
 }
 export default App;
