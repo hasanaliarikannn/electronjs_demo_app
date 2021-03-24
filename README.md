@@ -2,4 +2,4 @@
 https://prnt.sc/10tpiej
 
 
-Basit api ile yapılan masaüstü api :)
+Basit api ile yapılan masaüstü app:)
